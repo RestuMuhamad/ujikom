@@ -24,41 +24,66 @@
     <link href="asset/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script>
-    $(document).ready(function(){ //ready function
+        $(document).ready(function() { //ready function
 
-        //menu mahasiswa
-        $("#m_mahasiswa").click(function(){
-        loadMhs();        
-        });
-        
-        $("#m_dosen").click(function(){
-        loadDosen();        
-        });
-
-        $("#m_semester").click(function(){
-        loadSemester();        
-        });
-
-        $("#m_jadwal").click(function(){
-        loadJadwal();        
-        });
-
-        $("#laporan").click(function(){
-        loadLaporan();        
-        });
-        
-        $("#contentData").on("click", "#addButton", function() {
-            $.ajax({
-                url: 'form-add.php',
-                type: 'get',
-                success: function(data) {
-                    $('#contentData').html(data);
-                }
+            //menu mahasiswa
+            $("#m_mahasiswa").click(function() {
+                loadMhs();
             });
-        });
 
-        //simpan data mahasiswa
-        $("#contentData").on("submit", "#formMhs", function(e) {
+            $("#m_dosen").click(function() {
+                loadDosen();
+            });
+
+            $("#m_semester").click(function() {
+                loadSemester();
+            });
+
+            $("#m_jadwal").click(function() {
+                loadJadwal();
+            });
+
+            $("#laporan").click(function() {
+                loadLaporan();
+            });
+
+            //menu mahasiswa
+            $("#m_mahasiswa").click(function() {
+                loadMhs();
+            });
+
+            //menu matkul
+            $("#m_matkul").click(function() {
+                loadMatkul();
+            });
+
+            //menu user
+            $("#m_user").click(function() {
+                loadUser();
+            });
+
+            //menu krs
+            $("#krs").click(function() {
+                loadKrs();
+            });
+
+            //menu laporan krs
+            $("#laporan-krs").click(function() {
+                loadLaporanKrs();
+            });
+
+            $("#contentData").on("click", "#addButton", function() {
+                $.ajax({
+                    url: 'form-add.php',
+                    type: 'get',
+                    success: function(data) {
+                        $('#contentData').html(data);
+                    }
+                });
+            });
+
+            //simpan data mahasiswa
+            $("#contentData").on("submit", "#formMhs", function(e) {
                 e.preventDefault();
                 $.ajax({
                     url: 'mahasiswa/mahasiswa.php?action=save',
@@ -66,13 +91,13 @@
                     data: $(this).serialize(),
                     success: function(data) {
                         alert(data);
-                        loadMhs(); 
+                        loadMhs();
                     }
                 });
             });
 
-         //hapus data mahasiswa berdasarkan nim
-         $("#contentData").on("click", "#deleteMhs", function() {
+            //hapus data mahasiswa berdasarkan nim
+            $("#contentData").on("click", "#deleteMhs", function() {
                 var nim = $(this).attr("value");
                 $.ajax({
                     url: 'mahasiswa/mahasiswa.php?action=delete',
@@ -109,26 +134,203 @@
                     url: 'mahasiswa/mahasiswa.php?action=edit',
                     type: 'post',
                     data: $(this).serialize(),
-                    success: function(data) {  
+                    success: function(data) {
                         alert(data);
                         loadMhs();
                     }
                 });
             });
-        
+
+            //simpan data matakuliah
+            $("#contentData").on("submit", "#formMatkul", function(e) {
+                e.preventDefault();
+                $.ajax({
+                    url: 'matkul/matkul.php?action=save',
+                    type: 'post',
+                    data: $(this).serialize(),
+                    success: function(data) {
+                        alert(data);
+                        loadMatkul();
+                    }
+                });
+            });
+
+            //hapus data matakuliah berdasarkan kode matkul
+            $("#contentData").on("click", "#deleteMatkul", function() {
+                var kode = $(this).attr("value");
+                $.ajax({
+                    url: 'matkul/matkul.php?action=delete',
+                    type: 'post',
+                    data: {
+                        kd_matkul: kode
+                    },
+                    success: function(data) {
+                        alert(data);
+                        loadMatkul();
+                    }
+                });
+            });
+
+            //Load form edit matkul dengan parameter kode matkul
+            $("#contentData").on("click", "#editMatkul", function() {
+                var kode = $(this).attr("value");
+                $.ajax({
+                    url: 'matkul/edit.php',
+                    type: 'get',
+                    data: {
+                        kd_matkul: kode
+                    },
+                    success: function(data) {
+                        $('#contentData').html(data);
+                    }
+                });
+            });
+
+            //edit data matkul
+            $("#contentData").on("submit", "#formEditMatkul", function(e) {
+                e.preventDefault();
+                $.ajax({
+                    url: 'matkul/matkul.php?action=edit',
+                    type: 'post',
+                    data: $(this).serialize(),
+                    success: function(data) {
+                        alert(data);
+                        loadMatkul();
+                    }
+                });
+            });
+
+            //simpan data user
+            $("#contentData").on("submit", "#formUser", function(e) {
+                e.preventDefault();
+                $.ajax({
+                    url: 'user/user.php?action=save',
+                    type: 'post',
+                    data: $(this).serialize(),
+                    success: function(data) {
+                        alert(data);
+                        loadUser();
+                    }
+                });
+            });
+
+            //hapus data user berdasarkan id
+            $("#contentData").on("click", "#deleteUser", function() {
+                var kode = $(this).attr("value");
+                $.ajax({
+                    url: 'user/user.php?action=delete',
+                    type: 'post',
+                    data: {
+                        id: kode
+                    },
+                    success: function(data) {
+                        alert(data);
+                        loadUser();
+                    }
+                });
+            });
+
+            //Load form edit user dengan parameter id
+            $("#contentData").on("click", "#editUser", function() {
+                var id = $(this).attr("value");
+                $.ajax({
+                    url: 'user/edit.php',
+                    type: 'get',
+                    data: {
+                        id
+                    },
+                    success: function(data) {
+                        $('#contentData').html(data);
+                    }
+                });
+            });
+
+            //edit data krs
+            $("#contentData").on("submit", "#formEditUser", function(e) {
+                e.preventDefault();
+                $.ajax({
+                    url: 'user/user.php?action=edit',
+                    type: 'post',
+                    data: $(this).serialize(),
+                    success: function(data) {
+                        alert(data);
+                        loadUser();
+                    }
+                });
+            });
+
+            //simpan data krs
+            $("#contentData").on("submit", "#formKrs", function(e) {
+                e.preventDefault();
+                $.ajax({
+                    url: 'krs/krs.php?action=save',
+                    type: 'post',
+                    data: $(this).serialize(),
+                    success: function(data) {
+                        alert(data);
+                        loadKrs();
+                    }
+                });
+            });
+
+            //hapus data krs berdasarkan id
+            $("#contentData").on("click", "#deleteKrs", function() {
+                var kode = $(this).attr("value");
+                $.ajax({
+                    url: 'krs/krs.php?action=delete',
+                    type: 'post',
+                    data: {
+                        id: kode
+                    },
+                    success: function(data) {
+                        alert(data);
+                        loadKrs();
+                    }
+                });
+            });
+
+            //Load form edit krs dengan parameter id
+            $("#contentData").on("click", "#editKrs", function() {
+                var id = $(this).attr("value");
+                $.ajax({
+                    url: 'krs/edit.php',
+                    type: 'get',
+                    data: {
+                        id
+                    },
+                    success: function(data) {
+                        $('#contentData').html(data);
+                    }
+                });
+            });
+
+            //edit data krs
+            $("#contentData").on("submit", "#formEditKrs", function(e) {
+                e.preventDefault();
+                $.ajax({
+                    url: 'krs/krs.php?action=edit',
+                    type: 'post',
+                    data: $(this).serialize(),
+                    success: function(data) {
+                        alert(data);
+                        loadKrs();
+                    }
+                });
+            });
+
             //simpan data dosen
             $("#contentData").on("submit", "#formDosen", function(e) {
-                    e.preventDefault();
-                    $.ajax({
-                        url: 'dosen/dosen.php?action=save',
-                        type: 'post',
-                        data: $(this).serialize(),
-                        success: function(data) {
-                            alert(data);
-                            loadDosen(); 
-                        }
-                    });
+                e.preventDefault();
+                $.ajax({
+                    url: 'dosen/dosen.php?action=save',
+                    type: 'post',
+                    data: $(this).serialize(),
+                    success: function(data) {
+                        alert(data);
+                        loadDosen();
+                    }
                 });
+            });
 
             //hapus data dosen berdasarkan nim
             $("#contentData").on("click", "#deleteDosen", function() {
@@ -168,26 +370,26 @@
                     url: 'dosen/dosen.php?action=edit',
                     type: 'post',
                     data: $(this).serialize(),
-                    success: function(data) {  
+                    success: function(data) {
                         alert(data);
                         loadDosen();
                     }
                 });
             });
-            
+
             //simpan data semester
             $("#contentData").on("submit", "#formSemester", function(e) {
-                    e.preventDefault();
-                    $.ajax({
-                        url: 'semester/semester.php?action=save',
-                        type: 'post',
-                        data: $(this).serialize(),
-                        success: function(data) {
-                            alert(data);
-                            loadSemester(); 
-                        }
-                    });
+                e.preventDefault();
+                $.ajax({
+                    url: 'semester/semester.php?action=save',
+                    type: 'post',
+                    data: $(this).serialize(),
+                    success: function(data) {
+                        alert(data);
+                        loadSemester();
+                    }
                 });
+            });
 
             //hapus data dosen berdasarkan nim
             $("#contentData").on("click", "#deleteSemester", function() {
@@ -227,26 +429,26 @@
                     url: 'semester/semester.php?action=edit',
                     type: 'post',
                     data: $(this).serialize(),
-                    success: function(data) {  
+                    success: function(data) {
                         alert(data);
                         loadSemester();
                     }
                 });
             });
-            
+
             //simpan data jadwal
             $("#contentData").on("submit", "#formJadwal", function(e) {
-                    e.preventDefault();
-                    $.ajax({
-                        url: 'jadwal/jadwal.php?action=save',
-                        type: 'post',
-                        data: $(this).serialize(),
-                        success: function(data) {
-                            alert(data);
-                            loadJadwal(); 
-                        }
-                    });
+                e.preventDefault();
+                $.ajax({
+                    url: 'jadwal/jadwal.php?action=save',
+                    type: 'post',
+                    data: $(this).serialize(),
+                    success: function(data) {
+                        alert(data);
+                        loadJadwal();
+                    }
                 });
+            });
 
             //hapus data jadwal berdasarkan id jadwal
             $("#contentData").on("click", "#deleteJadwal", function() {
@@ -286,66 +488,104 @@
                     url: 'jadwal/jadwal.php?action=edit',
                     type: 'post',
                     data: $(this).serialize(),
-                    success: function(data) {  
+                    success: function(data) {
                         alert(data);
                         loadJadwal();
                     }
                 });
             });
-    });//end ready function
+        }); //end ready function
 
-    function loadMhs() {
-      $.ajax({
-          url: 'mahasiswa/list.php',
-          type: 'get',
-          success: function(data) {
-              $('#contentData').html(data);
-          }
-      });
-    }
-    
-    function loadDosen() {
-      $.ajax({
-          url: 'dosen/list.php',
-          type: 'get',
-          success: function(data) {
-              $('#contentData').html(data);
-          }
-      });
-    }
-    
-    function loadSemester() {
-      $.ajax({
-          url: 'semester/list.php',
-          type: 'get',
-          success: function(data) {
-              $('#contentData').html(data);
-          }
-      });
-    }
+        function loadMhs() {
+            $.ajax({
+                url: 'mahasiswa/list.php',
+                type: 'get',
+                success: function(data) {
+                    $('#contentData').html(data);
+                }
+            });
+        }
 
-    function loadJadwal() {
-      $.ajax({
-          url: 'jadwal/list.php',
-          type: 'get',
-          success: function(data) {
-              $('#contentData').html(data);
-          }
-      });
-    }
+        function loadDosen() {
+            $.ajax({
+                url: 'dosen/list.php',
+                type: 'get',
+                success: function(data) {
+                    $('#contentData').html(data);
+                }
+            });
+        }
 
-    function loadLaporan() {
-      $.ajax({
-          url: 'laporan/',
-          type: 'get',
-          success: function(data) {
-              $('#contentData').html(data);
-          }
-      });
-    }
+        function loadSemester() {
+            $.ajax({
+                url: 'semester/list.php',
+                type: 'get',
+                success: function(data) {
+                    $('#contentData').html(data);
+                }
+            });
+        }
 
-      
-</script>
+        function loadJadwal() {
+            $.ajax({
+                url: 'jadwal/list.php',
+                type: 'get',
+                success: function(data) {
+                    $('#contentData').html(data);
+                }
+            });
+        }
+
+        function loadLaporan() {
+            $.ajax({
+                url: 'laporan/',
+                type: 'get',
+                success: function(data) {
+                    $('#contentData').html(data);
+                }
+            });
+        }
+
+        function loadMatkul() {
+            $.ajax({
+                url: 'matkul/list.php',
+                type: 'get',
+                success: function(data) {
+                    $('#contentData').html(data);
+                }
+            });
+        }
+
+        function loadUser() {
+            $.ajax({
+                url: 'user/list.php',
+                type: 'get',
+                success: function(data) {
+                    $('#contentData').html(data);
+                }
+            });
+        }
+
+        function loadKrs() {
+            $.ajax({
+                url: 'krs/list.php',
+                type: 'get',
+                success: function(data) {
+                    $('#contentData').html(data);
+                }
+            });
+        }
+
+        function loadLaporanKrs() {
+            $.ajax({
+                url: 'laporan-krs/list.php',
+                type: 'get',
+                success: function(data) {
+                    $('#contentData').html(data);
+                }
+            });
+        }
+    </script>
 
 </head>
 
@@ -396,7 +636,8 @@
                         <a class="collapse-item" id="m_mahasiswa">Mahasiwa</a>
                         <a class="collapse-item" id="m_dosen">Dosen</a>
                         <a class="collapse-item" id="m_semester">Semester</a>
-                        <a class="collapse-item" id="m_jadwal">Jadwal</a>
+                        <a class="collapse-item" id="m_matkul">Mata kuliah</a>
+                        <a class="collapse-item" id="m_user">User</a>
                     </div>
                 </div>
             </li>
@@ -412,29 +653,27 @@
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Data Transaksi:</h6>
-                        <a class="collapse-item" id="jadwal">Jadwal</a>
+                        <a class="collapse-item" id="m_jadwal">Jadwal</a>
                         <a class="collapse-item" id="krs">KRS</a>
                     </div>
                 </div>
             </li>
 
-            <!-- Nav Item - Utilities Collapse Menu -->
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseReport"
-                    aria-expanded="true" aria-controls="collapseReport">
-                    <i class="fas fa-fw fa-wrench"></i>
-                    <span>Laporan</span>
+                <a class="nav-link" id="laporan">
+                    <i class="fas fa-fw fa-chart-area"></i>
+                    <span>Laporan Jadwal</span>
                 </a>
-                <div id="collapseReport" class="collapse" aria-labelledby="headingUtilities"
-                    data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Data Laporan:</h6>
-                        <a class="collapse-item" id="laporan">Laporan</a>
-                    </div>
-                </div>
             </li>
 
-           
+            <li class="nav-item">
+                <a class="nav-link" id="laporan-krs">
+                    <i class="fas fa-fw fa-chart-area"></i>
+                    <span>Laporan KRS</span>
+                </a>
+            </li>
+
+
             <!-- Sidebar Toggler (Sidebar) -->
             <div class="text-center d-none d-md-inline">
                 <button class="rounded-circle border-0" id="sidebarToggle"></button>
@@ -657,12 +896,12 @@
 
                 <!-- Begin Page Content -->
                 <div id="contentData">
-                <div class="container-fluid">
-        <!-- Page Heading -->
-            <div >
-            <h1 class="h3 mb-4 text-gray-800">Welcome </h1>
-            </div>
-        </div>
+                    <div class="container-fluid">
+                        <!-- Page Heading -->
+                        <div>
+                            <h1 class="h3 mb-4 text-gray-800">Welcome </h1>
+                        </div>
+                    </div>
                 </div>
                 <!-- /.container-fluid -->
 
@@ -720,9 +959,9 @@
     <!-- Custom scripts for all pages-->
     <script src="asset/js/sb-admin-2.min.js"></script>
 
-    
 
-   
+
+
 
 </body>
 
